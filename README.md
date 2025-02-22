@@ -26,6 +26,10 @@
       <code>git clone https://github.com/NicNias/NLW-Connect-Java.git</code>
     </li>
     <li>
+      Run
+      <code>docker-compose up -d</code>
+    </li>
+    <li>
       use Swagger with the following URL: 
       <code>http://localhost:8080/swagger-ui/index.html</code>
     </li>
