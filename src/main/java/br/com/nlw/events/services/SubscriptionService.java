@@ -1,8 +1,6 @@
 package br.com.nlw.events.services;
 
-import br.com.nlw.events.dto.SubscriptionDto;
-import br.com.nlw.events.dto.SubscriptionResponseDto;
-import br.com.nlw.events.dto.UserDto;
+import br.com.nlw.events.dto.*;
 import br.com.nlw.events.entity.EventEntity;
 import br.com.nlw.events.entity.SubscriptionEntity;
 import br.com.nlw.events.entity.UserEntity;
@@ -15,6 +13,9 @@ import br.com.nlw.events.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +57,33 @@ public class SubscriptionService {
         subscriptionRepository.save(newSubs);
 
         return new SubscriptionResponseDto(newSubs.getSubscriptionNumber(), "http://codecraft.com/subscription/"+newSubs.getEvent().getPrettyName()+"/"+newSubs.getUser().getId());
+    }
+
+    public List<SubscriptionRankingItemDto> getCompleteRanking(String prettyName) {
+        EventEntity event = eventRepository.findByPrettyName(prettyName).orElseThrow(() -> {
+            throw new CustomException("Ranking do evento: " + prettyName + " não existe", HttpStatus.NOT_FOUND, null);
+        });
+
+        List<Object[]> rankingData = subscriptionRepository.generateRanking(event.getEventId());
+        return subscriptionMapper.toRankingDtoList(rankingData);
+    }
+
+    public SubscriptionRakingByUser getRankingByUser(String prettyName, Integer userId) {
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new CustomException("Usuário " + userId + " não foi cadastrado no sistema", HttpStatus.BAD_REQUEST, null);
+        }
+
+        List<SubscriptionRankingItemDto> ranking = getCompleteRanking(prettyName);
+
+        SubscriptionRankingItemDto item = ranking.stream().filter(i->i.userId().equals(userId)).findFirst().orElse(null);
+        if (item == null) {
+            throw new CustomException("Não há inscrições para este usuario " + userId, HttpStatus.NOT_FOUND, null);
+        }
+
+        Integer posicao = IntStream.range(0, ranking.size())
+                .filter(pos -> ranking.get(pos).userId().equals(userId))
+                .findFirst().getAsInt();
+        return new SubscriptionRakingByUser(item, posicao+1);
     }
 }

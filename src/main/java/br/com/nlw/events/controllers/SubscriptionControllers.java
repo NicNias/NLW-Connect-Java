@@ -19,4 +19,14 @@ public class SubscriptionControllers {
     public ResponseEntity<SubscriptionResponseDto> saveSub(@PathVariable String prettyName, @RequestBody @Valid UserDto user, @PathVariable(required = false) Integer userId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionService.createNewSubscription(prettyName, user, userId));
     }
+
+    @GetMapping("/{prettyName}/ranking")
+    public ResponseEntity<?> generatedRankingByEvent(@PathVariable String prettyName) {
+        return ResponseEntity.ok(subscriptionService.getCompleteRanking(prettyName));
+    }
+
+    @GetMapping("/{prettyName}/ranking/{userId}")
+    public ResponseEntity<?> generatedRankingByEventAndUser(@PathVariable String prettyName, @PathVariable Integer userId) {
+        return ResponseEntity.ok(subscriptionService.getRankingByUser(prettyName, userId));
+    }
 }
