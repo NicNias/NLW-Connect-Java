@@ -18,7 +18,7 @@
   <ol>
     <li>
       Run
-      <code>git clone https://github.com/NicNias/Manager-API.git</code>
+      <code>git clone https://github.com/NicNias/NLW-Connect-Java.git</code>
     </li>
     <li>
       use Swagger with the following URL: 
