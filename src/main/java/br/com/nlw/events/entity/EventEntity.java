@@ -1,6 +1,5 @@
 package br.com.nlw.events.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,11 +34,9 @@ public class EventEntity {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Schema(type = "string", format = "time", example = "10:30:00")
     @Column(name = "start_time")
     private LocalTime startTime;
 
-    @Schema(type = "string", format = "time", example = "10:30:00")
     @Column(name = "end_time")
     private LocalTime endTime;
 }

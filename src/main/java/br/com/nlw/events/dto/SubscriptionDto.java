@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class Subscription {
+public class SubscriptionDto {
     private EventEntity event;
     private UserEntity user;
     private UserEntity indication;

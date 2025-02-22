@@ -1,4 +1,10 @@
 package br.com.nlw.events.dto;
 
-public record UserDto() {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
+public class UserDto {
+    private String name;
+    private String email;
 }

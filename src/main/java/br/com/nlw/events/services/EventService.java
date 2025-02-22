@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EventService {
@@ -17,9 +19,17 @@ public class EventService {
 
     public EventDto addNewEvent(EventDto eventDto) {
         eventRepository.findByPrettyName(eventDto.prettyName()).ifPresent(eventEntity -> {
-            throw new CustomException("Email ja cadastrado no Sistema", HttpStatus.CONFLICT, null);
+            throw new CustomException("Evento ja cadastrado no Sistema", HttpStatus.CONFLICT, null);
         });
         EventEntity eventEntity = eventRepository.save(eventMapper.toModel(eventDto));
         return eventMapper.toDto(eventEntity);
+    }
+
+    public List<EventDto> findAllEvent() {
+        List<EventEntity> events = eventRepository.findAll();
+        if (events.isEmpty()) {
+            throw new CustomException("Nenhum evento encontrado!", HttpStatus.NOT_FOUND, null);
+        }
+        return eventMapper.listEventDto(events);
     }
 }
