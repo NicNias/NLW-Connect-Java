@@ -26,7 +26,7 @@
       <code>git clone https://github.com/NicNias/NLW-Connect-Java.git</code>
     </li>
     <li>
-      Run
+      Build and start the containers using Docker-Compose:
       <code>docker-compose up -d</code>
     </li>
     <li>
